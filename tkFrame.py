@@ -22,12 +22,9 @@ class tkFrame():
            
 
     def UpdateLabel(self, value,name, time): 
-        print 'update Label ' + value + ' ' + name + ' ' + time
         tname = 't' + name
-
         w = root.nametowidget("."+name)
         wt = root.nametowidget("."+tname)
-        print 'container label ' + str(w) + ' ' + str(wt)
         w.configure(text=value)
         wt.configure(text=str(time))
     

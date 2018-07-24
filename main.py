@@ -34,7 +34,7 @@ def display():
         
 def verifyAlarm():
     while True:
-        time.sleep(10)
+        time.sleep(100)
         for d in data:
             verifyTimeElapsed(d)
             verifyMinMaxTemp(d) 
@@ -73,12 +73,11 @@ def verifyMinMaxTemp(d):
 
 def updateConfig():
     while True:
-        time.sleep(10)
+        time.sleep(10000)
         updt = Update()
         updt.getConfigFile()
         con.reloadFile()
         
-
 # def showApp():
 #     global frame
 #     app = wx.App(False)
@@ -110,7 +109,7 @@ if __name__ == "__main__":
         thread.start_new_thread(mqttConnect, ())
         thread.start_new_thread(display, ())
         thread.start_new_thread(verifyAlarm, ())
-        #thread.start_new_thread(updateConfig, ())
+        thread.start_new_thread(updateConfig, ())
     except:
         print "Error: unable to start thread"
 
