@@ -6,27 +6,27 @@ class tkFrame():
     def makeFrame(self):
         r = 0
         for d in data:
-            print d
+            print(d)
             td = 't' + d
             name = Label(text=data[d])
-            name.grid(sticky="W",row=r,column=0,pady=10)
+            name.grid(sticky="W", row=r, column=0, pady=10)
             name.config(font=("Courier", 24))
             temp = Label(text="-------C", name=d)
-            temp.grid(row=r,column=1,pady=10)
+            temp.grid(row=r, column=1, pady=10)
             temp.config(font=("Courier", 34))
             tm = Label(text="", name=td)
-            tm.grid(row=r,column=2)
+            tm.grid(row=r, column=2)
             #cancella la colonna
             tm.grid_forget()
             r = r + 1
-           
+
 
     def UpdateLabel(self, value,name, time): 
         tname = 't' + name
         w = root.nametowidget("."+name)
         wt = root.nametowidget("."+tname)
         w.configure(text=value)
-        wt.configure(text=str(time))
+        wt.configure(text=time)
     
     def getLabelTime(self, name):
         tname = 't' + name
@@ -52,11 +52,9 @@ class tkFrame():
        
 
     def __init__(self, r):
-        global data,root
+        global data, root
         root = r
         con = Config()
         data = con.getConfigDevice()
         frame = Frame(root, name="saefy")
         self.makeFrame()
-       
-    

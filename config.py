@@ -13,24 +13,24 @@ class Config:
             abs_file_path = os.path.join(script_dir, rel_path)
             configFile = Path(abs_file_path)
             assert os.path.exists(abs_file_path)
-            print configFile
+            print(configFile)
             config = configparser.ConfigParser()
-            print 'name ' + configFile.name
+            print('name ' + configFile.name)
             config.read(configFile.name)
 
-            print config.sections()
+            print(config.sections())
             mqttConfig = config['mqtt']
             d = dict(mqttConfig)
-            print d
+            print(d)
         except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            print("I/O error({0}): {1}".format(e.errno, e.strerror))
         
-    
-    def reloadFile(self):
+
+    def reloadFile():
         try:
             configFile = Path("./config.conf")
         except IOError as e:
-            print "I/O error({0}): {1}".format(e.errno, e.strerror)
+            print("I/O error({0}): {1}".format(e.errno, e.strerror))
         config = configparser.ConfigParser()
         config.read(configFile.name)
         
@@ -53,7 +53,7 @@ class Config:
             mqttConfig = config['mqtt']
             return dict(mqttConfig)
         except KeyError:
-            print "Errore file configurazione"
+            print("Errore file configurazione")
             return ''
         
 
@@ -64,10 +64,10 @@ class Config:
             l = deviceConfig.split(',')
             for a in l:
                 l = a.split(':')
-                data[l[1]]=l[0]
+                data[l[1]] = l[0]
             return data
         except KeyError:
-            print "Errore file configurazione Device"
+            print("Errore file configurazione Device")
             return data
     
     def getTimeNoData(self):
@@ -80,7 +80,7 @@ class Config:
         l = deviceConfig.split(',')
         for a in l:
             l = a.split(':')
-            data[l[1]]=l[0]
+            data[l[1]] = l[0]
         return data
     
     def getMaxTemp(self):
@@ -90,10 +90,10 @@ class Config:
             l = deviceConfig.split(',')
             for a in l:
                 l = a.split(':')
-                data[l[1]]=l[0]
+                data[l[1]] = l[0]
             return data
         except KeyError:
-            print "Errore file alert maxtremp"
+            print("Errore file alert maxtremp")
             return data
     
     def getConfigUpdate(self):

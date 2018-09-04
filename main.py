@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 
+
 from mqtt import Mqtt
 #from frame import Frame
 from tkFrame import tkFrame
@@ -13,12 +14,19 @@ from datetime import datetime
 from update import Update
 from Tkinter import *
 
+
+# =======Debug
+# import pydevd
+# pydevd.settrace('192.168.20.218', port=12345, stdoutToServer=True, stderrToServer=True)
+# =======end
+
 global queue
-queue = Queue.Queue()
+# queue = Queue.Queue()
+queue = Queue.Queue(maxsize=12)  # maxsize=0 infinite queue size
 
 
 def mqttConnect():
-    m = Mqtt(queue,con)
+    m = Mqtt(queue, con)
     m.connect()
 
 
@@ -30,7 +38,18 @@ def display():
             temp = str(data['Temperature']) + ' C'
             deviceId = str(data['DeviceId'])
             localtime = str(data['localtime'])
-            frame.UpdateLabel(temp,deviceId,localtime)
+            frame.UpdateLabel(temp, deviceId, localtime)
+
+            quenefull = queue.full()
+            print("Return True if the queue is full, False otherwise. ", quenefull)
+
+            quenesize = queue.qsize()
+            print("Return the approximate size of the queue. ", quenesize)
+
+            queueempty = queue.empty()
+            print("Return True if the queue is empty, False otherwise. ", queueempty)
+            print("\n")
+
         except Queue.Empty:
             data = 'empty'
         
@@ -43,23 +62,28 @@ def verifyAlarm():
             
               
 def verifyTimeElapsed(d):
-    print "verify time ..."
+    print("verify time ...")
     if frame.getLabelTime(str(d)):
         try:
             timeLabel = frame.getLabelTime(str(d))
             timeNow = time.ctime(time.time())
-            tdelta = datetime.strptime(timeNow,"%a %b %d %H:%M:%S %Y") - datetime.strptime(str(timeLabel),"%a %b %d %H:%M:%S %Y")
-            print tdelta.seconds
+            tdelta = datetime.strptime(timeNow, "%a %b %d %H:%M:%S %Y") - datetime.strptime(str(timeLabel), "%a %b %d %H:%M:%S %Y")
+
+            print(timeLabel)
+            print(timeNow)
+            print(tdelta.seconds)
+            print(int(con.getTimeNoData()))
+
             if tdelta.seconds > int(con.getTimeNoData()): 
                 frame.errorLabel(d)
         except ValueError:
-            print 'valore sbagliato ' + frame.getLabelTime(str(d))
+            print('valore sbagliato ' + frame.getLabelTime(str(d)))
             
 
 def verifyMinMaxTemp(d):
     if d in maxTemp:
         if frame.getLabelTemperature(str(d)): 
-            tempLabel =frame.getLabelTemperature(str(d))
+            tempLabel = frame.getLabelTemperature(str(d))
             val = 0.0
             mt = 0.0
             try:
@@ -93,8 +117,8 @@ def showApp():
     frame = tkFrame(root)
     root.overrideredirect(True)
     root.overrideredirect(False)
-    root.attributes("-fullscreen", True) 
-    #root.geometry('800x600')
+    root.attributes("-fullscreen", True)  # True
+    # root.geometry('800x600')
     root.columnconfigure(0, weight=1)
     root.mainloop()
 
@@ -103,7 +127,7 @@ def loadConfig():
     data = con.getConfigDevice()
 
 if __name__ == "__main__":
-    global data,con,maxTemp
+    global data, con, maxTemp
     con = Config()
     data = con.getConfigDevice()
     maxTemp = con.getMaxTemp()
@@ -113,7 +137,6 @@ if __name__ == "__main__":
         thread.start_new_thread(verifyAlarm, ())
         thread.start_new_thread(updateConfig, ())
     except:
-        print "Error: unable to start thread"
+        print("Error: unable to start thread")
 
     showApp()
-    
