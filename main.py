@@ -1,11 +1,13 @@
+#!/usr/local/bin/python
+
 from mqtt import Mqtt
-from frame import Frame
+#from frame import Frame
 from tkFrame import tkFrame
 from config import Config
 import thread
 import time
 import Queue
-import wx
+#import wx
 import json
 from datetime import datetime
 from update import Update
@@ -16,7 +18,7 @@ queue = Queue.Queue()
 
 
 def mqttConnect():
-    m = Mqtt(queue)
+    m = Mqtt(queue,con)
     m.connect()
 
 

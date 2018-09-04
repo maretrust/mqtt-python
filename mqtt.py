@@ -8,10 +8,10 @@ from time import strftime
 
 class Mqtt:
 
-    def __init__(self,  queue):
-        global configMqtt
+    def __init__(self,  queue, con):
+        global configMqtt, configuration
         self.q = queue
-        configuration = Config()
+        configuration = con
         configMqtt = configuration.getConfigMqtt()
 
 
@@ -31,6 +31,7 @@ class Mqtt:
 
     def connect(self):
         global clientMqtt 
+        print "configMqtt: " + str(configMqtt)
         clientId = 'bolsezanadisplay'
         port = configMqtt['port']
         mqttServer = configMqtt['mqtt_server']

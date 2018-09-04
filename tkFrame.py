@@ -9,10 +9,10 @@ class tkFrame():
             print d
             td = 't' + d
             name = Label(text=data[d])
-            name.grid(sticky="W",row=r,column=0,pady=20)
-            name.config(font=("Courier", 34))
+            name.grid(sticky="W",row=r,column=0,pady=10)
+            name.config(font=("Courier", 24))
             temp = Label(text="-------C", name=d)
-            temp.grid(row=r,column=1,pady=20)
+            temp.grid(row=r,column=1,pady=10)
             temp.config(font=("Courier", 34))
             tm = Label(text="", name=td)
             tm.grid(row=r,column=2)

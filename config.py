@@ -1,23 +1,34 @@
 import configparser
 from pathlib import Path
 import pathlib
+import os
 
 class Config:
 
     def __init__(self):
         global config
         try:
-            configFile = Path("./config.conf")
-            configFile.resolve()
+            script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+            rel_path = "config.conf"
+            abs_file_path = os.path.join(script_dir, rel_path)
+            configFile = Path(abs_file_path)
+            assert os.path.exists(abs_file_path)
+            print configFile
+            config = configparser.ConfigParser()
+            print 'name ' + configFile.name
+            config.read(configFile.name)
+
+            print config.sections()
+            mqttConfig = config['mqtt']
+            d = dict(mqttConfig)
+            print d
         except IOError as e:
             print "I/O error({0}): {1}".format(e.errno, e.strerror)
-        config = configparser.ConfigParser()
-        config.read(configFile.name)
+        
     
     def reloadFile(self):
         try:
             configFile = Path("./config.conf")
-            configFile.resolve()
         except IOError as e:
             print "I/O error({0}): {1}".format(e.errno, e.strerror)
         config = configparser.ConfigParser()
@@ -40,7 +51,7 @@ class Config:
     def getConfigMqtt(self):
         try:
             mqttConfig = config['mqtt']
-            return mqttConfig
+            return dict(mqttConfig)
         except KeyError:
             print "Errore file configurazione"
             return ''
@@ -73,13 +84,17 @@ class Config:
         return data
     
     def getMaxTemp(self):
-        deviceConfig = config['alert']['maxTemp']
         data = {}
-        l = deviceConfig.split(',')
-        for a in l:
-            l = a.split(':')
-            data[l[1]]=l[0]
-        return data
+        try:
+            deviceConfig = config['alert']['maxTemp']
+            l = deviceConfig.split(',')
+            for a in l:
+                l = a.split(':')
+                data[l[1]]=l[0]
+            return data
+        except KeyError:
+            print "Errore file alert maxtremp"
+            return data
     
     def getConfigUpdate(self):
         updateConfig = config['update']

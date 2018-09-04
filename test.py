@@ -1,33 +1,20 @@
-from Tkinter import *
+import configparser,os, pathlib
+from pathlib import Path
 
-root = Tk()
+script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+rel_path = "config.conf"
+abs_file_path = os.path.join(script_dir, rel_path)
+configFile = Path(abs_file_path)
+assert os.path.exists(abs_file_path)
+print configFile
+config = configparser.RawConfigParser()
+print 'name ' + configFile.name
+config.read(configFile.name)
 
-root.overrideredirect(True)
-root.overrideredirect(False)
-root.attributes("-fullscreen", True) 
-
-
-
-frame = Frame(root, name="saefy")
-
-
-colours = ['red','green','orange','white','yellow','blue']
-
-r = 0
-for c in colours:
-    Label(text=c, relief=RIDGE,width=15).grid(row=r,column=0)
-    Entry(bg=c, relief=SUNKEN,width=10).grid(row=r,column=1)
-    r = r + 1
+print config.sections()
+mqttConfig = config['mqtt']
+d = dict(mqttConfig)
+print d
 
 
-# w = Label(root, name="label1", text="red", bg="red", fg="white")
-# w.pack(padx=5, pady=10, side=LEFT)
-# w = Label(root, text="green",name="label2", bg="green", fg="black")
-# w.pack(padx=5, pady=20, side=LEFT)
-# w = Label(root, text="blue",name="label3", bg="blue", fg="white")
-# w.pack(padx=5, pady=20, side=LEFT)
 
-# lt = root.nametowidget(".label1")
-# lt
-
-root.mainloop()
